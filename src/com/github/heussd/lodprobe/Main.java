@@ -1,6 +1,9 @@
 package com.github.heussd.lodprobe;
 
+import java.io.File;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -17,11 +20,17 @@ public class Main {
 	private final static Query QUERY_COUNT_UNIQUE_SUBJECTS = QueryFactory.create("SELECT COUNT(distinct ?s) { ?s ?p ?o .}", Syntax.syntaxARQ);
 	private final static Query QUERY_COUNT_PROPERTIES = QueryFactory.create("SELECT ?p (COUNT(?p) as ?pCount) { ?s ?p ?o . } GROUP BY ?p ORDER BY ?p", Syntax.syntaxARQ);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		LOGGER.info("T.H. LODprobe");
 
-		System.out.print("Enter dataset name on local fuseki:");
+		System.out.print("Enter dataset name on local fuseki [DB]:");
 		String datasetId = System.console().readLine();
+
+		System.out.print("Enter target file name (.csv will be suffixed):");
+		String csvfile = System.console().readLine();
+
+		if (datasetId.trim().isEmpty())
+			datasetId = "DB";
 
 		// String datasetId = "people";
 
@@ -84,7 +93,10 @@ public class Main {
 		}
 
 		System.out.println("\n\n");
-		System.out.println("Number of unique subjects: " + subjects + propertyMatrix);
+		String output = "Number of unique subjects: " + subjects + propertyMatrix;
+		System.out.println(output);
+
+		FileUtils.writeStringToFile(new File("lodprobe/" + csvfile + ".csv"), output);
 	}
 
 	private static int getNumberOfUniqueSubjects(String datasetId) {
