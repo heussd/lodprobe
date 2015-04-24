@@ -22,7 +22,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		LOGGER.info("T.H. LODprobe");
-
+		
 		System.out.print("Enter target file name (.csv will be suffixed):");
 		String csvfile = System.console().readLine();
 		
@@ -123,7 +123,7 @@ public class Main {
 
 	private static Query createVsQuery(Resource x, Resource y, String prefixes) {
 		String query = prefixes;
-		query += "select COUNT(distinct ?s) { ?s " + getNamespace(x) + ":" + x.getLocalName() + " ?o1 . ?s " + getNamespace(y) + ":" + y.getLocalName() + " ?o2 . }";
+		query += "select COUNT(distinct ?s) { ?s " + getNamespace(x) + ":" + escapeProperty(x.getLocalName()) + " ?o1 . ?s " + getNamespace(y) + ":" + escapeProperty(y.getLocalName()) + " ?o2 . }";
 
 		return QueryFactory.create(query, Syntax.syntaxARQ);
 	}
@@ -139,5 +139,10 @@ public class Main {
 			prefixes += "\nPREFIX " + getNamespace(resource) + ": <" + resource.getNameSpace() + ">";
 		}
 		return prefixes;
+	}
+	
+	private static String escapeProperty(final String property) {
+		String escapedProperty = property.replaceAll("\\.", "\\\\.");
+		return escapedProperty;
 	}
 }
