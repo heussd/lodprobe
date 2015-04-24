@@ -23,11 +23,11 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		LOGGER.info("T.H. LODprobe");
 
-		System.out.print("Enter dataset name on local fuseki [DB]:");
-		String datasetId = System.console().readLine();
-
 		System.out.print("Enter target file name (.csv will be suffixed):");
 		String csvfile = System.console().readLine();
+		
+		System.out.print("Enter dataset name on local fuseki [DB]:");
+		String datasetId = System.console().readLine();
 
 		if (datasetId.trim().isEmpty())
 			datasetId = "DB";
@@ -57,8 +57,8 @@ public class Main {
 		LOGGER.info(propertyMatrix.size() + " properties in total");
 		String prefixes = getPrefixes(propertyMatrix);
 
-		System.out.print("Enter dataset name on local fuseki:");
-		datasetId = System.console().readLine();
+		// System.out.print("Enter dataset name on local fuseki:");
+		// datasetId = System.console().readLine();
 		for (int i = 0; i < propertyMatrix.size(); i++) {
 			Resource x = propertyMatrix.get(i);
 
@@ -123,7 +123,7 @@ public class Main {
 
 	private static Query createVsQuery(Resource x, Resource y, String prefixes) {
 		String query = prefixes;
-		query += "select COUNT(distinct ?s) { ?s " + getNamespace(x) + ":" + x.getLocalName() + " ?o1 . ?s " + getNamespace(y) + ":" + y.getLocalName() + " ?o2 . }";
+		query += "select COUNT(distinct ?s) { ?s <" + getNamespace(x) + ":" + x.getLocalName() + "> ?o1 . ?s <" + getNamespace(y) + ":" + y.getLocalName() + "> ?o2 . }";
 
 		return QueryFactory.create(query, Syntax.syntaxARQ);
 	}
