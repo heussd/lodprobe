@@ -123,7 +123,7 @@ public class Main {
 
 	private static Query createVsQuery(Resource x, Resource y, String prefixes) {
 		String query = prefixes;
-		query += "select COUNT(distinct ?s) { ?s <" + getNamespace(x) + ":" + x.getLocalName() + "> ?o1 . ?s <" + getNamespace(y) + ":" + y.getLocalName() + "> ?o2 . }";
+		query += "select COUNT(distinct ?s) { ?s " + getNamespace(x) + ":" + x.getLocalName() + " ?o1 . ?s " + getNamespace(y) + ":" + y.getLocalName() + " ?o2 . }";
 
 		return QueryFactory.create(query, Syntax.syntaxARQ);
 	}
