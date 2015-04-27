@@ -68,7 +68,6 @@ public class Main {
 
 					LOGGER.info(x.getLocalName() + " vs. " + y.getLocalName());
 
-					System.out.println(createVsQuery(x, y, prefixes));
 					String result = "";
 
 					try {
