@@ -38,3 +38,31 @@ Number of unique subjects: 9958|Count|[0]|[1]|[2]|[3]|[4]|[5]|[6]|[7]|[8]|[9]|[1
 [17] http://www.w3.org/2004/02/skos/core#inScheme|4979|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|4979|0
 [18] http://www.w3.org/2004/02/skos/core#prefLabel|4979|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|0
 [19] http://xmlns.com/foaf/0.1/primaryTopic|4979|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-
+
+## Analysis using R
+Further analysis of LODprobe's CSV files can be done via R.
+
+### Required libraries
+	# daisy
+	library(cluster)
+	
+### Reading LODprobe CSV
+The function [fromlodproberes()](fromlodproberes.R) allows to read a generated LODprobe CSV and converts it into a (symmetric) matrix object.
+
+	matrix <- fromlodproberes("people.csv")
+
+### Collecting property counts
+
+[writepropertycounts()](writepropertycounts.R) collects `property`-counts in a single CSV. Designed to be called when iterating over a number of LODprobe results.
+
+	writepropertycounts("people.csv")
+	
+### Cluster Analysis
+
+[writeclustprops()](writeclustprops.R) creates a cluster analysis of a given LODprobe CSV and extracts several metrics. Designed to be called when iterating over a number of LODprobe results.
+
+	writeclustprops("people.csv")
+	
+In addition, [writepng()](writepng.R) prints the cluster analysis as image file (Dendrogram).
+
+	writepng("people.csv")
