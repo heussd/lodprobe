@@ -24,10 +24,12 @@ public class Main {
 		LOGGER.info("T.H. LODprobe");
 		
 		System.out.print("Enter target file name (.csv will be suffixed):");
-		String csvfile = System.console().readLine();
+//		String csvfile = System.console().readLine();
+		String csvfile = null;
 		
 		System.out.print("Enter dataset name on local fuseki [DB]:");
-		String datasetId = System.console().readLine();
+//		String datasetId = System.console().readLine();
+		String datasetId = "http://lod2.openlinksw.com/sparql/";
 
 		if (datasetId.trim().isEmpty())
 			datasetId = "DB";
@@ -42,7 +44,7 @@ public class Main {
 		// / ##########################################
 		PropertyMatrix propertyMatrix = new PropertyMatrix();
 
-		QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://localhost:3030/" + datasetId + "/query", QUERY_COUNT_PROPERTIES);
+		QueryExecution queryExecution = QueryExecutionFactory.sparqlService(getServiceUrl(datasetId), QUERY_COUNT_PROPERTIES);
 		ResultSet results = queryExecution.execSelect();
 
 		// System.out.println(ResultSetFormatter.asText(results));
@@ -71,7 +73,7 @@ public class Main {
 					String result = "";
 
 					try {
-						QueryExecution exec = QueryExecutionFactory.sparqlService("http://localhost:3030/" + datasetId + "/query", createVsQuery(x, y, prefixes));
+						QueryExecution exec = QueryExecutionFactory.sparqlService(getServiceUrl(datasetId), createVsQuery(x, y, prefixes));
 						ResultSet r = exec.execSelect();
 
 						QuerySolution row = r.next();
@@ -98,8 +100,17 @@ public class Main {
 		FileUtils.writeStringToFile(new File("lodprobe/" + csvfile + ".csv"), output);
 	}
 
+	private static String getServiceUrl(String datasetId) {
+		if(datasetId.startsWith("http")) {
+			return datasetId;
+		} else {
+			// This is just a dataset Id for the local fuseki
+			return "http://localhost:3030/" + datasetId + "/query";
+		}	
+	}
+
 	private static int getNumberOfUniqueSubjects(String datasetId) {
-		QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://localhost:3030/" + datasetId + "/query", QUERY_COUNT_UNIQUE_SUBJECTS);
+		QueryExecution queryExecution = QueryExecutionFactory.sparqlService(getServiceUrl(datasetId), QUERY_COUNT_UNIQUE_SUBJECTS);
 
 		ResultSet results = queryExecution.execSelect();
 
